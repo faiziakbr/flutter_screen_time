@@ -23,7 +23,7 @@ abstract class FlutterScreenTimePlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String> checkAuthorization() {
+  Future<int> checkAuthorization() {
     throw UnimplementedError('checkAuthorization() has not been implemented.');
   }
 

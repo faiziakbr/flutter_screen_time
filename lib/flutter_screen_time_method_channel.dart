@@ -10,7 +10,7 @@ class MethodChannelFlutterScreenTime extends FlutterScreenTimePlatform {
   final methodChannel = const MethodChannel('flutter_screen_time');
 
   @override
-  Future<String> checkAuthorization() async {
+  Future<int> checkAuthorization() async {
     return await methodChannel.invokeMethod("checkAuthorization");
   }
 

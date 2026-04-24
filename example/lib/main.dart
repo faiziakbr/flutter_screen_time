@@ -16,14 +16,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _flutterScreenTimePlugin = FlutterScreenTime();
-  String authValue = "";
+  int authValue = 0;
 
   @override
   void initState() {
     super.initState();
   }
 
-  Future<String> checkAuthorization() async {
+  Future<int> checkAuthorization() async {
     return await _flutterScreenTimePlugin.checkAuthorization();
   }
 
@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(authValue),
+              Text(authValue == 1 ? "Permission granted" : authValue == 0 ? "Not determined" : "Permission denied"),
               TextButton(
                 onPressed: () async {
                   authValue = await checkAuthorization();

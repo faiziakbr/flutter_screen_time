@@ -1,3 +1,3 @@
 ## 0.0.1
-
-* TODO: Describe initial release.
+* iOS support only
+* Functionality added for block and unblock apps. 

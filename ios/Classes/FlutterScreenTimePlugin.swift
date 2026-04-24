@@ -41,21 +41,21 @@ public class FlutterScreenTimePlugin: NSObject, FlutterPlugin {
         }
     }
     
-    public func checkAuthorization() -> String {
+    public func checkAuthorization() -> Int {
         let status = AuthorizationCenter.shared.authorizationStatus
         
         switch status {
         case .notDetermined:
-            return "Permission not requested yet"
+            return 0
             
         case .denied:
-            return "Permission denied"
+            return -1
             
         case .approved:
-            return "Permission granted"
+            return 1
             
         @unknown default:
-            return ""
+            return 0
         }
     }
     

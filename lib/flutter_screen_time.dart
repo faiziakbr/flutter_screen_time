@@ -3,7 +3,7 @@ import 'flutter_screen_time_platform_interface.dart';
 
 class FlutterScreenTime {
 
-  Future<String> checkAuthorization() async {
+  Future<int> checkAuthorization() async {
     return await FlutterScreenTimePlatform.instance.checkAuthorization();
   }
 

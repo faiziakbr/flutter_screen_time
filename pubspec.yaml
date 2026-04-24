@@ -1,7 +1,7 @@
 name: flutter_screen_time
 description: "Screen time"
 version: 0.0.1
-homepage:
+homepage: https://github.com/faiziakbr/flutter_screen_time
 
 environment:
   sdk: ^3.11.4

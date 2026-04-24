@@ -16,7 +16,7 @@ Add the plugin to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_screen_time: ^0.0.1
+  flutter_screen_time_api: ^0.0.1
 ```
 
 ## Prerequisite

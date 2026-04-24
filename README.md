@@ -2,6 +2,8 @@
 
 Flutter Screen Time is an **iOS-only** project.
 
+![Demo](./readme_images/demo.gif)
+
 ## Features
 
 - Get permission status

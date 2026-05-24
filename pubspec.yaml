@@ -1,11 +1,11 @@
 name: flutter_screen_time_api
 description: "Screen time"
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/faiziakbr/flutter_screen_time
 
 environment:
   sdk: ^3.11.4
-  flutter: '>=3.3.0'
+  flutter: ">=3.41.0"
 
 dependencies:
   flutter:

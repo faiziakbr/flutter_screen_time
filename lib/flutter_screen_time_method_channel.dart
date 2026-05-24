@@ -33,4 +33,9 @@ class MethodChannelFlutterScreenTime extends FlutterScreenTimePlatform {
   void unblockApps() {
     methodChannel.invokeMethod("unblockApps");
   }
+
+  @override
+  Future<void> setShieldConfiguration(Map<String, dynamic> configuration) async {
+    await methodChannel.invokeMethod("setShieldConfiguration", configuration);
+  }
 }

@@ -6,6 +6,18 @@ import ManagedSettings
 
 public class FlutterScreenTimePlugin: NSObject, FlutterPlugin {
     private let store = ManagedSettingsStore()
+    private let sharedDefaultsSuite = "group.com.faizan.flutterScreenTimeExample"
+    private let shieldConfigurationKey = "shield_configuration_payload"
+
+    private struct ShieldConfigurationPayload: Codable {
+        let title: String
+        let subtitle: String?
+        let primaryButtonLabel: String?
+        let secondaryButtonLabel: String?
+        let primaryButtonBackgroundColorHex: String?
+        let backgroundColorHex: String?
+        let backgroundBlurStyle: String?
+    }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_screen_time", binaryMessenger: registrar.messenger())
@@ -33,6 +45,17 @@ public class FlutterScreenTimePlugin: NSObject, FlutterPlugin {
         case "blockApps":
             blockApps();
             result(true)
+        case "setShieldConfiguration":
+            guard let arguments = call.arguments as? [String: Any] else {
+                result(FlutterError(code: "INVALID_ARGUMENTS", message: "Expected a configuration object.", details: nil))
+                return
+            }
+            do {
+                try saveShieldConfiguration(arguments: arguments)
+                result(true)
+            } catch {
+                result(FlutterError(code: "SHIELD_CONFIG_SAVE_FAILED", message: error.localizedDescription, details: nil))
+            }
         case "unblockApps":
             encourageAll()
             result(true)
@@ -80,6 +103,8 @@ public class FlutterScreenTimePlugin: NSObject, FlutterPlugin {
     }
     
     public func blockApps() {
+        saveDefaultShieldConfigurationIfMissing()
+
         guard let selectedApps = getSavedFamilyActivitySelection() else {
             print("block apps returned")
             return
@@ -123,6 +148,54 @@ public class FlutterScreenTimePlugin: NSObject, FlutterPlugin {
         let decoder = PropertyListDecoder()
         selectedApp = try? decoder.decode(FamilyActivitySelection.self, from: data)
         return selectedApp
+    }
+
+    private func saveShieldConfiguration(arguments: [String: Any]) throws {
+        guard let title = arguments["title"] as? String, title.isEmpty == false else {
+            throw NSError(domain: "flutter_screen_time", code: 400, userInfo: [NSLocalizedDescriptionKey: "title is required and must be non-empty"])
+        }
+
+        let payload = ShieldConfigurationPayload(
+            title: title,
+            subtitle: arguments["subtitle"] as? String,
+            primaryButtonLabel: arguments["primaryButtonLabel"] as? String,
+            secondaryButtonLabel: arguments["secondaryButtonLabel"] as? String,
+            primaryButtonBackgroundColorHex: arguments["primaryButtonBackgroundColorHex"] as? String,
+            backgroundColorHex: arguments["backgroundColorHex"] as? String,
+            backgroundBlurStyle: arguments["backgroundBlurStyle"] as? String
+        )
+
+        guard let sharedDefaults = UserDefaults(suiteName: sharedDefaultsSuite) else {
+            throw NSError(domain: "flutter_screen_time", code: 500, userInfo: [NSLocalizedDescriptionKey: "Unable to access shared defaults suite"])
+        }
+
+        let encodedPayload = try JSONEncoder().encode(payload)
+        sharedDefaults.set(encodedPayload, forKey: shieldConfigurationKey)
+    }
+
+    private func saveDefaultShieldConfigurationIfMissing() {
+        guard let sharedDefaults = UserDefaults(suiteName: sharedDefaultsSuite) else {
+            print("Failed to open shared defaults suite for shield config defaults.")
+            return
+        }
+
+        if sharedDefaults.data(forKey: shieldConfigurationKey) != nil {
+            return
+        }
+
+        let defaultPayload = ShieldConfigurationPayload(
+            title: "Blocked by flutter_screen_time",
+            subtitle: "Usage is restricted right now.",
+            primaryButtonLabel: "OK",
+            secondaryButtonLabel: nil,
+            primaryButtonBackgroundColorHex: "#2563EB",
+            backgroundColorHex: "#111827",
+            backgroundBlurStyle: "systemUltraThinMaterialDark"
+        )
+
+        if let encodedPayload = try? JSONEncoder().encode(defaultPayload) {
+            sharedDefaults.set(encodedPayload, forKey: shieldConfigurationKey)
+        }
     }
     
     private func topViewController(

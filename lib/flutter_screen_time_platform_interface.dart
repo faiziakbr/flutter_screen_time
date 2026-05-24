@@ -42,4 +42,8 @@ abstract class FlutterScreenTimePlatform extends PlatformInterface {
   void unblockApps() {
     throw UnimplementedError('unblockApps() has not been implemented.');
   }
+
+  Future<void> setShieldConfiguration(Map<String, dynamic> configuration) {
+    throw UnimplementedError('setShieldConfiguration() has not been implemented.');
+  }
 }

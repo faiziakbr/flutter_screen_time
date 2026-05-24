@@ -35,7 +35,18 @@ class _MyAppState extends State<MyApp> {
     _flutterScreenTimePlugin.chooseApps();
   }
 
-  void blockApps() {
+  Future<void> blockApps() async {
+    await _flutterScreenTimePlugin.setShieldConfiguration(
+      const ShieldConfigurationPayload(
+        title: "Focus Time Enabled",
+        subtitle: "This app is blocked during your focus session.",
+        primaryButtonLabel: "Got it",
+        // secondaryButtonLabel: "Close",
+        primaryButtonBackgroundColorHex: "#2563EB",
+        backgroundColorHex: "#111827CC",
+        backgroundBlurStyle: ShieldBackgroundBlurStyle.systemMaterialDark,
+      ),
+    );
     _flutterScreenTimePlugin.blockApps();
   }
 
@@ -76,8 +87,8 @@ class _MyAppState extends State<MyApp> {
                 child: Text("Choose Apps"),
               ),
               TextButton(
-                onPressed: () {
-                  blockApps();
+                onPressed: () async {
+                  await blockApps();
                 },
                 child: Text("Block Apps"),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'android_overlay_configuration.dart';
 import 'flutter_screen_time_platform_interface.dart';
 
 /// An implementation of [FlutterScreenTimePlatform] that uses method channels.
@@ -37,5 +38,15 @@ class MethodChannelFlutterScreenTime extends FlutterScreenTimePlatform {
   @override
   Future<void> setShieldConfiguration(Map<String, dynamic> configuration) async {
     await methodChannel.invokeMethod("setShieldConfiguration", configuration);
+  }
+
+  @override
+  Future<void> configureAndroidOverlayUI(
+      AndroidOverlayConfiguration configuration,
+      ) async {
+    await methodChannel.invokeMethod(
+      "configureAndroidOverlayUI",
+      configuration.toMap(),
+    );
   }
 }

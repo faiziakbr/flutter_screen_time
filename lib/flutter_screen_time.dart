@@ -1,5 +1,8 @@
 
+import 'android_overlay_configuration.dart';
 import 'flutter_screen_time_platform_interface.dart';
+
+export 'android_overlay_configuration.dart';
 
 enum ShieldBackgroundBlurStyle {
   systemThinMaterial,
@@ -88,5 +91,14 @@ class FlutterScreenTime {
 
   Future<void> setShieldConfiguration(ShieldConfigurationPayload configuration) async {
     await FlutterScreenTimePlatform.instance.setShieldConfiguration(configuration.toMap());
+  }
+
+  /// Customises the Android blocking overlay (title, message, colours, text
+  /// sizes and corner radius). No-op on other platforms.
+  Future<void> configureAndroidOverlayUI(
+      AndroidOverlayConfiguration configuration,
+      ) async {
+    await FlutterScreenTimePlatform.instance
+        .configureAndroidOverlayUI(configuration);
   }
 }

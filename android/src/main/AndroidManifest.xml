@@ -1,3 +1,41 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.faizan.flutter_screen_time">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Detect the foreground app. -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- Run the blocking service in the foreground so it survives. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Draw the blocking "shield" over other apps. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- See launchable apps in the picker (Android 11+ package visibility). -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
+    <application>
+        <!-- Polls the foreground app and shields blocked ones with an overlay. -->
+        <service
+            android:name=".BlockAppService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="app_blocking" />
+        </service>
+
+        <!-- Native app picker (Android analog of the iOS FamilyActivityPicker). -->
+        <activity
+            android:name=".AppPickerActivity"
+            android:exported="false"
+            android:label="Choose apps to block"
+            android:theme="@android:style/Theme.Material.Light.DarkActionBar" />
+    </application>
 </manifest>

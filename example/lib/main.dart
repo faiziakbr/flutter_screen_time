@@ -54,6 +54,12 @@ class _MyAppState extends State<MyApp> {
     _flutterScreenTimePlugin.unblockApps();
   }
 
+  void configureAndroidOverlay() async {
+    await _flutterScreenTimePlugin.configureAndroidOverlayUI(
+      AndroidOverlayConfiguration(title: "App Blocked", secondaryButtonLabel: "Secondary button"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,7 +72,13 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(authValue == 1 ? "Permission granted" : authValue == 0 ? "Not determined" : "Permission denied"),
+              Text(
+                authValue == 1
+                    ? "Permission granted"
+                    : authValue == 0
+                    ? "Not determined"
+                    : "Permission denied",
+              ),
               TextButton(
                 onPressed: () async {
                   authValue = await checkAuthorization();
@@ -97,6 +109,12 @@ class _MyAppState extends State<MyApp> {
                   unblockApps();
                 },
                 child: Text("Unblock Apps"),
+              ),
+              TextButton(
+                onPressed: () {
+                  configureAndroidOverlay();
+                },
+                child: Text("Configure Android Overlay"),
               ),
             ],
           ),

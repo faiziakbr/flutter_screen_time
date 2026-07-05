@@ -1,5 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'android_overlay_configuration.dart';
 import 'flutter_screen_time_method_channel.dart';
 
 abstract class FlutterScreenTimePlatform extends PlatformInterface {
@@ -45,5 +46,9 @@ abstract class FlutterScreenTimePlatform extends PlatformInterface {
 
   Future<void> setShieldConfiguration(Map<String, dynamic> configuration) {
     throw UnimplementedError('setShieldConfiguration() has not been implemented.');
+  }
+
+  Future<void> configureAndroidOverlayUI(AndroidOverlayConfiguration configuration) {
+    throw UnimplementedError('configureAndroidOverlayUI() has not been implemented.');
   }
 }
